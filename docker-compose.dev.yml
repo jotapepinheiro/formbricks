@@ -1,6 +1,7 @@
 version: "3.3"
 services:
   postgres:
+    container_name: formbricks-postgres
     image: postgres:15-alpine
     volumes:
       - postgres:/var/lib/postgresql/data
@@ -10,6 +11,19 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
+
+  pgadmin:
+    container_name: formbricks-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'admin@admin.com'
+      PGADMIN_DEFAULT_PASSWORD: 'admin'
+    volumes:
+      - ./backupDB:/var/lib/pgadmin/storage
+    ports:
+      - 80:80
+    depends_on:
+      - postgres
 
   mailhog:
     image: mailhog/mailhog
